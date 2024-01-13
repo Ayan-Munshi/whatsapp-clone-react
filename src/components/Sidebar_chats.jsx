@@ -24,7 +24,7 @@ function Sidebar_chats({ createnewchat }) {
     </div>
   ) : (
     <div onClick={add_new_chat}>
-      <h2 className=" font-bold p-4  cursor-pointer  border-gray-400 border-b-[0.2px] hover:bg-gray-300">
+      <h2 className=" font-bold p-4  cursor-pointer  border-gray-400 border-b-[0.2px] hover:bg-gray-300 ">
         + Add New chat
       </h2>
     </div>
