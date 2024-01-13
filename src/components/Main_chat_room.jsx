@@ -9,7 +9,7 @@ function Main_chat_room() {
     <div id="main chat" style={{ flex: "0.65" }} className=" flex flex-col rounded-e-lg">
       <div
         id="chat header"
-        className="flex items-center bg-zinc-300 h-14  shadow p-3 font-bold bg-emerald-800"
+        className="flex items-center bg-zinc-300 h-14  shadow p-3 font-bold "
       >
         <Avatar
           src={`https://api.dicebear.com/7.x/bottts/svg?seed=${
