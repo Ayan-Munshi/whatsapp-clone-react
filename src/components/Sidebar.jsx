@@ -16,7 +16,7 @@ function Sidebar() {
     
       <div
         id="side header"
-        className="flex justify-between p-2 border-r-[1px] border-black bg-emerald-800"
+        className="flex justify-between p-2 border-r-[1px] border-black bg-zinc-300"
       >
         <Avatar />
         <div id="sidebar header right" className="flex justify-between ">

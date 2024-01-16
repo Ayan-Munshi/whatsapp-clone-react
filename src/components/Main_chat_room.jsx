@@ -3,10 +3,17 @@ import React from "react";
 import { GoSearch } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
+import { FaRegSmile } from "react-icons/fa";
+import { IoSend } from "react-icons/io5";
+import Message from "./Message";
 
 function Main_chat_room() {
   return (
-    <div id="main chat" style={{ flex: "0.65" }} className=" flex flex-col rounded-e-lg">
+    <div
+      id="main chat"
+      style={{ flex: "0.65" }}
+      className=" flex flex-col rounded-e-lg"
+    >
       <div
         id="chat header"
         className="flex items-center bg-zinc-300 h-14  shadow p-3 font-bold "
@@ -32,10 +39,33 @@ function Main_chat_room() {
           </IconButton>
         </div>
       </div>
-      <div id="chat body" className="flex-1 bg-orange-100" >
-        <img src="" alt="" />
+      <div id="chat body" className="flex-1 bg-orange-100 p-5">
+        
+           <Message/>   {/*  //this is a component */}
+
       </div>
-      <div id="chat footer"></div>
+      <div
+        id="chat footer"
+        className=" flex bg-zinc-300 h-[65px] p-5 border-t-[1px]  items-center justify-between"
+      >
+        <IconButton>
+          <FaRegSmile />
+        </IconButton>
+        <form action="submit" className=" flex flex-1">
+          <input
+            type="text"
+            placeholder="Type message here...."
+            className=" flex-1 items-center p-2 m-2 border-none rounded-xl"
+          />
+          <button type="submit" className="bg-gray-300 rounded-[50%] ">
+            <div id="send button" className="bg-[#25D366] p-2 rounded-[50%] ">
+              <IconButton>
+                <IoSend />
+              </IconButton>
+            </div>
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
