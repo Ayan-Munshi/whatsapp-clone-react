@@ -1,5 +1,5 @@
 import { Avatar, IconButton } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
@@ -8,6 +8,21 @@ import { IoSend } from "react-icons/io5";
 import Message from "./Message";
 
 function Main_chat_room() {
+ 
+  const[inputvalue,setinputvalue] = useState(" ")
+
+  const input_handler = (e) => {
+       
+       setinputvalue(e.target.value)
+
+  }
+
+  const onclickhandler = (e) =>{
+    e.preventDefault()
+    console.log(inputvalue)
+    setinputvalue("")
+  }
+
   return (
     <div
       id="main chat"
@@ -41,7 +56,7 @@ function Main_chat_room() {
       </div>
       <div id="chat body" className="flex-1 bg-orange-100 p-5">
         
-           <Message/>   {/*  //this is a component */}
+           <Message/>   {/* //this is a component */}
 
       </div>
       <div
@@ -54,10 +69,15 @@ function Main_chat_room() {
         <form action="submit" className=" flex flex-1">
           <input
             type="text"
+            value={inputvalue}
+            onChange={input_handler}
             placeholder="Type message here...."
             className=" flex-1 items-center p-2 m-2 border-none rounded-xl"
           />
-          <button type="submit" className="bg-gray-300 rounded-[50%] ">
+          <button 
+           onClick={onclickhandler} 
+           type="submit" 
+           className="bg-gray-300 rounded-[50%] ">
             <div id="send button" className="bg-[#25D366] p-2 rounded-[50%] ">
               <IconButton>
                 <IoSend />
