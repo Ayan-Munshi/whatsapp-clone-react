@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { MdDonutLarge } from "react-icons/md";
 import { MdMessage } from "react-icons/md";
 import { CiMenuKebab } from "react-icons/ci";
 import { Avatar, IconButton } from "@mui/material";
 import Sidebar_chats from "./Sidebar_chats";
+import db from "../firebase";
+import { onSnapshot, collection } from "firebase/firestore";
 
 function Sidebar() {
+  const [rooms, setRooms] = useState([]);
+
+  
+    useEffect(() => {
+      
+      const unsubscribe = onSnapshot(collection(db, "rooms"), (snapshot) =>
+        setRooms(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
+  
+      // Cleanup function
+      return () => unsubscribe();
+    }, []);
+    
+
   return (
     <div
       id="total sidebar"
-      style={{ flex: "0.35" }}  /**flex:0.35 actual wp uses */
+      style={{ flex: "0.35" }} /**flex:0.35 actual wp uses */
       className=" flex flex-col "
     >
-    
       <div
         id="side header"
         className="flex justify-between p-2 border-r-[1px] border-black bg-zinc-300"
@@ -46,9 +66,9 @@ function Sidebar() {
       </div>
       <div id="side chats" className=" flex-1">
         <Sidebar_chats createnewchat />
-        <Sidebar_chats />
-        <Sidebar_chats />
-        <Sidebar_chats />
+        {rooms.map((room) => (
+          <Sidebar_chats key={room.id} id={room.id} name={room.data.name} />
+        ))}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar'
 import Main_chat_room from './components/Main_chat_room'
 
 
+
 function App() {
   
 
@@ -12,6 +13,7 @@ function App() {
        <div id='main wp body' className='flex  h-[89vh] w-[90vw] shadow-xl  rounded-lg  bg-white'>  
             <Sidebar/>
             <Main_chat_room/>
+            
        </div>
      </div>
       

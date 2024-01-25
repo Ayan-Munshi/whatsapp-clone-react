@@ -76,12 +76,12 @@ function Main_chat_room() {
           />
           <button 
            onClick={onclickhandler} 
-           type="submit" 
+           type="submit"  
            className="bg-gray-300 rounded-[50%] ">
             <div id="send button" className="bg-[#25D366] p-2 rounded-[50%] ">
-              <IconButton>
+              {/* <IconButton>
                 <IoSend />
-              </IconButton>
+              </IconButton> */}
             </div>
           </button>
         </form>
