@@ -9,7 +9,7 @@ import db from "../firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 
 function Sidebar() {
-  const [rooms, setRooms] = useState([]);
+  const [Rooms, setRooms] = useState([]);
 
   
     useEffect(() => {
@@ -64,9 +64,9 @@ function Sidebar() {
           />
         </div>
       </div>
-      <div id="side chats" className=" flex-1">
+      <div id="side chats" className=" flex-1 overflow-scroll">
         <Sidebar_chats createnewchat />
-        {rooms.map((room) => (
+        {Rooms.map((room) => (
           <Sidebar_chats key={room.id} id={room.id} name={room.data.name} />
         ))}
       </div>
