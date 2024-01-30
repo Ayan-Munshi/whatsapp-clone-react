@@ -2,6 +2,7 @@ import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import db from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 function Sidebar_chats({ id, name, createnewchat }) {
   const [seedval, setseedval] = useState("");
@@ -33,6 +34,7 @@ function Sidebar_chats({ id, name, createnewchat }) {
   };
 
   return !createnewchat ? (
+    <Link to={`/rooms/${id}`}>
     <div className="flex p-2 cursor-pointer  border-gray-400 border-b-[0.2px] hover:bg-gray-300">
       <Avatar src={`https://api.dicebear.com/7.x/bottts/svg?seed=${seedval}`} />{" "}
       {/* ...link of random avatar */}
@@ -41,12 +43,14 @@ function Sidebar_chats({ id, name, createnewchat }) {
         <p className="text-[10px] ">information....</p>
       </div>
     </div>
+    </Link>
   ) : (
     <div onClick={add_new_chat}>
       <h2 className=" font-bold p-4  cursor-pointer  border-gray-400 border-b-[0.2px] hover:bg-gray-300 ">
         + Add New chat
       </h2>
     </div>
+    
   );
 }
 
