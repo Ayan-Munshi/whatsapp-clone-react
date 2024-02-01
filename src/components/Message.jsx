@@ -5,8 +5,8 @@ function Message() {
   return (
     <>
     
-        <img src="" alt="" />
-        <p className={`sender-message ${true && "reciever-message"}`}
+       
+        <p className={`sender-message ${true && "reciever-message"}`} //means if a specific condition is true then access reciever-message or access sender-nessage
         >
 
           <span

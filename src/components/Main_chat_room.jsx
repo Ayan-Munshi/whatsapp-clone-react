@@ -1,23 +1,45 @@
 import { Avatar, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
 import { FaRegSmile } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import Message from "./Message";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
+import { doc , onSnapshot } from "firebase/firestore";
 
 function Main_chat_room() {
  
   const[inputvalue,setinputvalue] = useState(" ")
+  const[roomname,setroomname] = useState("")
+  const roomid = useParams().roomid //adding useparam on roomid
 
-  const input_handler = (e) => {
+  useEffect(() => {
+    if (roomid) {
+      const unsubscribe = onSnapshot(doc(db, 'rooms', roomid), (snapshot) => {      // Cleanup function to unsubscribe when the component unmounts
+        if (snapshot.exists()) {
+          setroomname(snapshot.data().name);
+        }
+      });
+  
+      
+      return () => unsubscribe();
+    }
+  }, [roomid]);
+  
+
+
+
+
+  const input_handler = (e) => {   // for the onchange in the input section
        
        setinputvalue(e.target.value)
 
   }
 
-  const onclickhandler = (e) =>{
+  const onclickhandler = (e) =>{    // for the onclick in the submit button
     e.preventDefault()
     console.log(inputvalue)
     setinputvalue("")
@@ -39,7 +61,7 @@ function Main_chat_room() {
           }`}
         />
         <div id="chat information" className="flex-1 p-e-[20px]">
-          <h2 className="mx-2">room name</h2>
+          <h2 className="mx-2">{roomname}</h2>
           <p className="mx-2 text-[11px]">last online...</p>
         </div>
         <div id="chat head icons" className="flex min-w-[90px] justify-between">
@@ -79,9 +101,9 @@ function Main_chat_room() {
            type="submit"  
            className="bg-gray-300 rounded-[50%] ">
             <div id="send button" className="bg-[#25D366] p-2 rounded-[50%] ">
-              {/* <IconButton>
+              <IconButton>
                 <IoSend />
-              </IconButton> */}
+              </IconButton>
             </div>
           </button>
         </form>
