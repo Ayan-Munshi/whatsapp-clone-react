@@ -1,8 +1,9 @@
 import { createContext, useReducer } from "react";
 
-const context = createContext()
+const Context = createContext()
+export const set_user = "set_user"; // just a string value 
 export const initialstate = {user :null}
-export const actiontype = {set_user :set_user}
+export const actiontype = { set_user : 'set_user' } // had to declear it above to use it
 
 const reducer = (state,action) =>{
     console.log(action)
@@ -13,13 +14,15 @@ const reducer = (state,action) =>{
     }
 }
 
-const provider = ({children}) => {
+const Contextprovider = ({children}) => {
 
     const[x,dispatch] = useReducer(reducer,initialstate)
 
     return(
-        <context.Provider value={{x,dispatch}}>
+        <Context.Provider value={{x,dispatch}}>
             {children}
-        </context.Provider>
+        </Context.Provider>
     )
 }
+
+export {Contextprovider,Context}
