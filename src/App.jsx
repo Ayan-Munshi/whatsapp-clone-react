@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Main_chat_room from "./components/Main_chat_room";
 import Login from "./components/Login";
+import { Context } from "./Context-reducer";
+
 
 
 function App() {
-  const [activeuser, setactiveuser] = useState(null);
+  // here we need the (user) to perform conditional renders   // 3
 
+  const { count } = useContext(Context); // 1st we took the count by useContext
+  const { user } = count; // then we took (user) which was stored in the (count) in useReducer(file name : Context-reducer)
+
+  
   return (
     <>
       <div id="background" className="h-screen w-screen bg-gray-300 px-5 py-5 ">
-        {!activeuser ? (    // if no user then run login component else render the components as directed
+        {!user ? (    // if no user then run login component else render the other components as directed
           <Login/>
         ) : (
           

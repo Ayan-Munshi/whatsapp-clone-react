@@ -1,15 +1,27 @@
 import React from "react";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth"; // needed to import signwithpopup
-
+import { useContext } from "react";
+import { Context, actiontype } from "../Context-reducer";
 
 function Login() {
-
+    const{dispatch} = useContext(Context)
   
     const signin = async () => {
         try {
-          const result = await signInWithPopup(auth, provider); // correct syntax according to the current veesion of firebase
-          console.log(result);
+          const result = await signInWithPopup(auth, provider) // here provider is the provider from my firebase file and correct syntax according to the 
+            .then((result)=>{
+              dispatch({                     // dispatching the type,user to the reducer function which is
+                                            // in Context-reducer file so that we can send the reducer function anywhere by context api's provider feature 
+                type: actiontype.set_user,   // actiontype is declared in Context-reducer file
+                user:result.user             // result.user has user info and this will be neede in future
+
+              })
+              console.log('user user info with many google signin feature ',result)
+              console.log('users information',result.user)       // form result just printing the user portion
+            })                                                   // current version of firebase (this line will help to sign in with google)
+          //console.log(result);
+
         } catch (error) {       //exception handling
           alert(error.message);
         }
@@ -38,3 +50,5 @@ function Login() {
 }
 
 export default Login;
+
+// 2
