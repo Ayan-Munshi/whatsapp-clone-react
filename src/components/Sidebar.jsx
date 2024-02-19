@@ -65,9 +65,14 @@ function Sidebar() {
         </div>
       </div>
       <div id="side chats" className=" flex-1 overflow-scroll">
-        <Sidebar_chats createnewchat />
-        {Rooms.map((room) => (
+        
+        <Sidebar_chats createnewchat /> { /* this one will be constatnt , this is sending addnewchat (word) 
+                                        to the <Sidebar_chats> components to get the design for (+ Add New Chat) section*/}
+
+        {Rooms.map((room) => (    // this one is the indivitual chat portion  
+
           <Sidebar_chats key={room.id} id={room.id} name={room.data.name} />
+
         ))}
       </div>
     </div>

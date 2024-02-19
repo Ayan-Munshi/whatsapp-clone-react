@@ -5,34 +5,49 @@ import { CiMenuKebab } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
 import { FaRegSmile } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
-import Message from "./Message";
 import { useParams } from "react-router-dom";
 import db from "../firebase";
-import { doc , onSnapshot } from "firebase/firestore";
+import { collection,onSnapshot,query,orderBy } from "firebase/firestore";
+import './Main_chat_room.css'
 
 function Main_chat_room() {
  
   const[inputvalue,setinputvalue] = useState(" ")
   const[roomname,setroomname] = useState("")
   const roomid = useParams().roomid //adding useparam on roomid
+  const [message,setmessage] = useState([])
+  
 
   useEffect(() => {
     if (roomid) {
-      const unsubscribe = onSnapshot(doc(db, 'rooms', roomid), (snapshot) => {      // Cleanup function to unsubscribe when the component unmounts
+      // Fetch room name
+      const unsubscribeRoom = onSnapshot(doc(db, 'rooms', roomid), (snapshot) => {
         if (snapshot.exists()) {
           setroomname(snapshot.data().name);
         }
       });
-  
-      
-      return () => unsubscribe();
+
+      // Fetch messages
+      const messageDBpath = collection(db, 'rooms', roomid, 'messages');
+      const messageOrder = query(messageDBpath, orderBy('timestamp', 'asc'));
+
+      const unsubscribeMessages = onSnapshot(messageOrder, (snapshot) => {
+        setmessage(snapshot.docs.map((doc) => doc.data()));
+      });
+
+      return () => {
+        unsubscribeRoom(); // Cleanup room subscription
+        unsubscribeMessages(); // Cleanup messages subscription
+      };
     }
   }, [roomid]);
+
+
+  
+ 
   
 
-
-
-
+ 
   const input_handler = (e) => {   // for the onchange in the input section
        
        setinputvalue(e.target.value)
@@ -78,7 +93,25 @@ function Main_chat_room() {
       </div>
       <div id="chat body" className="flex-1 bg-orange-100 p-5">
         
-           <Message/>   {/* //this is a component */}
+      <p className={`sender-message ${true && "reciever-message"}`} //means if a specific condition is true then access reciever-message or access sender-nessage
+        >
+
+          <span
+            id="message producers name"
+            className="text-[10px] absolute top-[-15px] font-bold "
+          >
+            user name
+          </span>
+
+          //ki
+
+          <span id="massage time" className="ml-2 text-[9px]">
+
+            12.00 pm
+
+          </span>
+
+        </p>
 
       </div>
       <div

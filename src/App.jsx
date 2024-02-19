@@ -25,7 +25,7 @@ function App() {
             id="main wp body"
             className="flex h-[89vh] w-[90vw] shadow-xl rounded-lg bg-white"
           >
-            <Router>
+            <Router>       {/* <Sidebar> also contains <sidebar-chats> */}
               <Sidebar /> {/* sidebar is here outside because we want it to be rendered as default always **/}
               <Routes>
                 <Route

@@ -1,33 +1,28 @@
-import React from 'react'
-import  './Message.css'
+import React, { useState,useEffect } from 'react'
+
+import { useParams } from 'react-router-dom'
+import db from '../firebase'
+import { collection,onSnapshot,query,orderBy } from "firebase/firestore";
 
 function Message() {
+  const [message,setmessage] = useState([])
+  const roomid = useParams().roomid
+  useEffect(() =>{
+    const messageDBpath = collection(db,'rooms',roomid,'messages',)
+    const messageorder = query(messageDBpath,orderBy('timestamp','asc'))
+
+    const unsubscribe = onSnapshot(messageorder,(snapshot) =>{
+      setmessage(snapshot.docs.map((doc) => doc.data()
+      ))
+    })
+    return () => unsubscribe()
+
+  },[roomid])
   return (
     <>
     
        
-        <p className={`sender-message ${true && "reciever-message"}`} //means if a specific condition is true then access reciever-message or access sender-nessage
-        >
-
-          <span
-            id="message producers name"
-            className="text-[10px] absolute top-[-15px] font-bold "
-          >
-            user name
-          </span>
-
-          uikgougkiou
-
-          <span id="massage time" className="ml-2 text-[9px]">
-
-            12.00 pm
-
-          </span>
-
-        </p>
-
-
-         
+        
 
 
     </>
