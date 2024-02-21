@@ -24,7 +24,7 @@ function Sidebar() {
       );
   
       // Cleanup function
-      return () => unsubscribe();
+      return () => unsubscribe();  // cleanup function
     }, []);
     
 

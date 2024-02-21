@@ -7,8 +7,9 @@ import { FaRegSmile } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import db from "../firebase";
-import { collection,onSnapshot,query,orderBy } from "firebase/firestore";
+import { collection,onSnapshot,query,orderBy,doc } from "firebase/firestore";
 import './Main_chat_room.css'
+import {nanoid} from 'nanoid'
 
 function Main_chat_room() {
  
@@ -20,25 +21,25 @@ function Main_chat_room() {
 
   useEffect(() => {
     if (roomid) {
-      // Fetch room name
-      const unsubscribeRoom = onSnapshot(doc(db, 'rooms', roomid), (snapshot) => {
-        if (snapshot.exists()) {
+      // Fetching room name from db
+      const unsubscribeRoom = onSnapshot(doc(db, 'rooms', roomid), (snapshot) => {   // according to the room ids which were automatically generated in firebase db at the time of creating the seperate rooms
+        if (snapshot.exists()) {    // if rooms exists then
           setroomname(snapshot.data().name);
         }
       });
 
-      // Fetch messages
-      const messageDBpath = collection(db, 'rooms', roomid, 'messages');
-      const messageOrder = query(messageDBpath, orderBy('timestamp', 'asc'));
+      // Fetching the  messages section from the database
+      const messageDBpath = collection(db, 'rooms', roomid, 'messages');    // path of the message section(messages is the collection in Db which has sender_name,message,timestamp fields)
+      const messageOrder = query(messageDBpath, orderBy('timestamp', 'asc'));  // sorting the messages in ascending order
 
-      const unsubscribeMessages = onSnapshot(messageOrder, (snapshot) => {
-        setmessage(snapshot.docs.map((doc) => doc.data()));
+      const unsubscribeMessages = onSnapshot(messageOrder, (snapshot) => {   // using the onSnapshot function of firebase to capture the current situation in that section (its more like a screenshot)
+        setmessage(snapshot.docs.map((doc) => doc.data()));     // pouring the data in to a variable to use further(setMessage)
       });
 
       return () => {
-        unsubscribeRoom(); // Cleanup room subscription
-        unsubscribeMessages(); // Cleanup messages subscription
-      };
+        unsubscribeRoom();      // cleanup room subscription
+        unsubscribeMessages(); // cleanup messages subscription
+      };                      // above cleanup functions are diff names because in 1 useEffect there cant be  another same named cleanup function
     }
   }, [roomid]);
 
@@ -92,26 +93,33 @@ function Main_chat_room() {
         </div>
       </div>
       <div id="chat body" className="flex-1 bg-orange-100 p-5">
-        
-      <p className={`sender-message ${true && "reciever-message"}`} //means if a specific condition is true then access reciever-message or access sender-nessage
-        >
-
-          <span
+      {message.map((msg)=>{    // mapping values of message variable coming which is from DB
+       
+       return( 
+        <div key={nanoid()}> {/** giving unique ids for every mapped item */}
+          <p className={`sender-message ${true && "reciever-message"}`}>  {/*means if a specific condition is true then access reciever-message or access sender-nessage*/}
+    
+           <span
             id="message producers name"
             className="text-[10px] absolute top-[-15px] font-bold "
-          >
-            user name
-          </span>
+           >
+            {msg.sender_name}    {/** i called it sender_name coz in DB collection i also set the field name called sender_name */}
+           </span>
+          
+           {msg.message}   {/** msg is the data from DB through map function,(message is the field name i set on the DB)  */}
 
-          //ki
+           <span id="massage time" className="ml-2 text-[9px]">
 
-          <span id="massage time" className="ml-2 text-[9px]">
+            {new Date(msg.timestamp?.toDate()).toUTCString()} {/** way to write the timestamp format */}
 
-            12.00 pm
+           </span>
 
-          </span>
-
-        </p>
+          </p>
+        </div> )
+        
+      })}
+        
+      
 
       </div>
       <div
