@@ -24,9 +24,9 @@ function Sidebar_chats({ id, name, createnewchat }) {  // arguments comins from 
           const docRef = await addDoc(collection(db, "rooms"), {
             name: chatroomname,
           });
-          console.log("Document written with ID: ", docRef.id); // if the code runs with no error then this
+          console.log("Document written with ID: ", docRef.id); // (this is the id of that newly created room) if the code runs with no error then this
         } catch (e) {
-          console.error("Error adding document: ", e); //e is the could be error
+          console.error("Error adding add new chat in DB: ", e); //e is the could be error
         }
       }
 

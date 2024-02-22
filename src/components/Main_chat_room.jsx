@@ -1,5 +1,5 @@
 import { Avatar, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
@@ -7,9 +7,10 @@ import { FaRegSmile } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import db from "../firebase";
-import { collection,onSnapshot,query,orderBy,doc } from "firebase/firestore";
+import { collection,onSnapshot,query,orderBy,doc,addDoc,serverTimestamp } from "firebase/firestore";
 import './Main_chat_room.css'
 import {nanoid} from 'nanoid'
+import { Context } from "../Context-reducer";
 
 function Main_chat_room() {
  
@@ -17,6 +18,8 @@ function Main_chat_room() {
   const[roomname,setroomname] = useState("")
   const roomid = useParams().roomid //adding useparam on roomid
   const [message,setmessage] = useState([])
+  const {count} = useContext(Context)
+  const {user} = count
   
 
   useEffect(() => {
@@ -44,10 +47,6 @@ function Main_chat_room() {
   }, [roomid]);
 
 
-  
- 
-  
-
  
   const input_handler = (e) => {   // for the onchange in the input section
        
@@ -57,7 +56,20 @@ function Main_chat_room() {
 
   const onclickhandler = (e) =>{    // for the onclick in the submit button
     e.preventDefault()
+
     console.log(inputvalue)
+
+    try{ const roompath = doc(db,'rooms',roomid)
+    const messageCollectionpath = collection(roompath,'messages')
+     addDoc(messageCollectionpath,{
+      sender_name: user.displayName,
+      message : inputvalue,
+      timestamp: serverTimestamp()
+     }) }
+    catch(error){
+      alert(`faceing error to add message details in DB ${error}`)
+    }
+
     setinputvalue("")
   }
 
@@ -65,7 +77,7 @@ function Main_chat_room() {
     <div
       id="main chat"
       style={{ flex: "0.65" }}
-      className=" flex flex-col rounded-e-lg"
+      className=" flex flex-col rounded-e-lg overflow-scroll"
     >
       <div
         id="chat header"
@@ -92,16 +104,16 @@ function Main_chat_room() {
           </IconButton>
         </div>
       </div>
-      <div id="chat body" className="flex-1 bg-orange-100 p-5">
+      <div id="chat body" className="flex-1 bg-orange-100 p-5 overflow-auto ">
       {message.map((msg)=>{    // mapping values of message variable coming which is from DB
        
        return( 
         <div key={nanoid()}> {/** giving unique ids for every mapped item */}
-          <p className={`sender-message ${true && "reciever-message"}`}>  {/*means if a specific condition is true then access reciever-message or access sender-nessage*/}
+         <p className={msg.sender_name === user.displayName ? "receiver-message" : "sender-message"}>   {/*means if a specific condition is true then access reciever-message or access sender-nessage*/}
     
            <span
             id="message producers name"
-            className="text-[10px] absolute top-[-15px] font-bold "
+            className="text-[10px] absolute top-[-15px] font-bold text-black"
            >
             {msg.sender_name}    {/** i called it sender_name coz in DB collection i also set the field name called sender_name */}
            </span>
@@ -115,6 +127,7 @@ function Main_chat_room() {
            </span>
 
           </p>
+          <br></br>
         </div> )
         
       })}
@@ -124,7 +137,7 @@ function Main_chat_room() {
       </div>
       <div
         id="chat footer"
-        className=" flex bg-zinc-300 h-[65px] p-5 border-t-[1px]  items-center justify-between"
+        className=" flex bg-zinc-300 h-[65px] p-5 border-t-[1px]  items-center justify-between "
       >
         <IconButton>
           <FaRegSmile />
