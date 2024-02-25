@@ -59,9 +59,10 @@ function Main_chat_room() {
 
     console.log(inputvalue)
 
-    try{ const roompath = doc(db,'rooms',roomid)
-    const messageCollectionpath = collection(roompath,'messages')
-     addDoc(messageCollectionpath,{
+    try
+    { const roompath = doc(db,'rooms',roomid) // asking firebase to go to the db then go to the "rooms" then go to the perticular roomid
+    const messageCollectionpath = collection(roompath,'messages') // go to the perticular roomid's subcollection "messages".(but if there is no subcollection named"messages" then this code will create one)
+     addDoc(messageCollectionpath,{  // add a document into the subcollection "messages".
       sender_name: user.displayName,
       message : inputvalue,
       timestamp: serverTimestamp()
@@ -90,7 +91,14 @@ function Main_chat_room() {
         />
         <div id="chat information" className="flex-1 p-e-[20px]">
           <h2 className="mx-2">{roomname}</h2>
-          <p className="mx-2 text-[11px]">last online...</p>
+          <p className="mx-2 text-[11px]">last online at {new Date(message[message.length - 1]?.timestamp?.toDate()).toLocaleString('en-US', {  //variable message[message.length -1] means the last message
+                                                                year: 'numeric',  
+                                                                month: 'numeric', 
+                                                                day: 'numeric', 
+                                                                hour: 'numeric', 
+                                                                minute: 'numeric', 
+                                                                hour12: true 
+                                                              }) }</p>
         </div>
         <div id="chat head icons" className="flex min-w-[90px] justify-between">
           <IconButton>
@@ -109,7 +117,7 @@ function Main_chat_room() {
        
        return( 
         <div key={nanoid()}> {/** giving unique ids for every mapped item */}
-         <p className={msg.sender_name === user.displayName ? "receiver-message" : "sender-message"}>   {/*means if a specific condition is true then access reciever-message or access sender-nessage*/}
+         <p className={msg.sender_name === user.displayName ? "receiver-message" : "sender-message"}>   {/*means if this condition is true then access reciever-message or access sender-nessage*/}
     
            <span
             id="message producers name"
